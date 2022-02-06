@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.han.movie_review_app.databinding.FragmentHomeBinding
@@ -35,7 +35,18 @@ class HomeFragment : ScopeFragment(), HomeContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
+        bindView()
         presenter.onViewCreated()
+    }
+
+    private fun bindView() {
+        (binding?.recyclerView?.adapter as? HomeAdapter)?.apply {
+            onMovieClickListener  = { movie ->
+                val action = HomeFragmentDirections.toMovieReviewsAction(movie)
+                findNavController().navigate(action)
+            }
+        }
+
     }
 
     override fun onDestroy() {
