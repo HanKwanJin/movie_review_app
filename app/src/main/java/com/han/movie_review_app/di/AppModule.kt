@@ -8,10 +8,7 @@ import com.han.movie_review_app.data.preference.PreferenceManager
 import com.han.movie_review_app.data.preference.SharedPreferenceManager
 import com.han.movie_review_app.data.repository.*
 import com.han.movie_review_app.domain.model.Movie
-import com.han.movie_review_app.domain.usecase.GetAllMoviesUseCase
-import com.han.movie_review_app.domain.usecase.GetAllMovieReviewsUseCase
-import com.han.movie_review_app.domain.usecase.GetMyReviewedMoviesUseCase
-import com.han.movie_review_app.domain.usecase.GetRandomFeaturedMovieUseCase
+import com.han.movie_review_app.domain.usecase.*
 import com.han.movie_review_app.presentation.home.HomeContract
 import com.han.movie_review_app.presentation.home.HomeFragment
 import com.han.movie_review_app.presentation.home.HomePresenter
@@ -44,8 +41,11 @@ val dataModule = module {
 val domainModule = module {
     factory { GetRandomFeaturedMovieUseCase(get(),get()) }
     factory { GetAllMoviesUseCase(get()) }
-    factory { GetAllMovieReviewsUseCase(get()) }
+    factory { GetAllMovieReviewsUseCase(get(),get()) }
     factory { GetMyReviewedMoviesUseCase(get(),get(),get()) }
+
+    factory { SubmitReviewUseCase(get(),get()) }
+    factory { DeleteReviewUseCase(get()) }
 }
 val presenterModule = module {
     scope<HomeFragment> {
@@ -53,7 +53,7 @@ val presenterModule = module {
     }
     scope<MovieReviewsFragment> {
         scoped<MovieReviewsContract.Presenter> { (movie: Movie) ->
-            MovieReviewsPresenter(movie, getSource(), get())
+            MovieReviewsPresenter(movie, getSource(), get(),get(),get())
         }
     }
 
